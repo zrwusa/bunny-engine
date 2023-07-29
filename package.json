@@ -1,0 +1,20 @@
+{
+  "name": "bunny-engine",
+  "version": "1.0.0",
+  "description": "bunny-engine description",
+  "main": "index.ts",
+  "repository": "https://github.com/zrwusa/bunny-engine.git",
+  "author": "<zrwusa@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node index.ts",
+    "build": "tsc",
+    "gen": "rm -rf dist && ts-node index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.5",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "4.9.5"
+  }
+}

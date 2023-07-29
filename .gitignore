@@ -1,0 +1,10 @@
+.DS_Store
+
+
+/dist
+/node_modules
+bunny-rest/node_modules
+bunny-rest/.vscode/
+bunny-rest/.idea/
+
+yarn-error.log

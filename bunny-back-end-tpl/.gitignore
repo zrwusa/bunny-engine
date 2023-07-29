@@ -1,0 +1,35 @@
+node_modules/**/*
+npm-debug.*
+*.jks
+*.p8
+*.p12
+#*.key
+*.mobileprovision
+*.orig.*
+
+# macOS
+.DS_Store
+
+# custom
+.idea/
+.vscode/
+
+notes/
+
+logs/
+build/
+dist/
+public/
+
+__tests__/
+
+.env
+.env.development
+.env.test
+
+yarn-error.log
+.vercel
+error.log
+
+
+

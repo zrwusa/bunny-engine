@@ -1,0 +1,61 @@
+version: '3.7'
+services:
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "90:90"
+      - "70:70"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - bunny-back-end-tpl
+
+  bunny-back-end-tpl:
+    image: zrwaus/bunny-back-end-tpl
+    build:
+      context: ./
+      args:
+        PKG_INSTALL_ENV: production
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=80
+      - MONGO_DB_URI=mongodb://root_prod:root_prod_password@mongo:27017/bunny-back-end-tpl?authSource=admin
+      - SALT_WORK_FACTOR=10
+      - ACCESS_TOKEN_TTL=15m
+      - REFRESH_TOKEN_TTL=1y
+      - METRICS_PORT=90
+      - REDIS_URI=redis://@redis:6379
+      - POSTGRES_URI=postgresql://postgres:root_prod_password@postgres:5432/bunny_back_end_tpl
+      - APOLLO_PORT=70
+      - CORS_ORIGINS=http://example-a:80,http://example-b:80
+      - OPEN_API_URL=http://example.com
+    entrypoint: sh -c "yarn build:compose && yarn serve:compose"
+    expose:
+      - "80"
+      - "90"
+      - "70"
+    depends_on:
+      - mongo
+    deploy:
+      replicas: 8
+      restart_policy:
+        condition: any
+      update_config:
+        parallelism: 2
+        delay: 15s
+
+  mongo:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root_prod
+      - MONGO_INITDB_ROOT_PASSWORD=root_prod_password
+    volumes:
+      - mongo:/data/db
+
+  redis:
+    image: redis
+
+volumes:
+  mongo:
