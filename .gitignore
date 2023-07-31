@@ -3,8 +3,9 @@
 
 /dist
 /node_modules
-bunny-rest/node_modules
-bunny-rest/.vscode/
-bunny-rest/.idea/
+/note
+bunny-back-end-tpl/node_modules
+bunny-back-end-tpl/.vscode/
+bunny-back-end-tpl/.idea/
 
 yarn-error.log

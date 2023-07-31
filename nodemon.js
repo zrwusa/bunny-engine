@@ -1,3 +1,3 @@
 module.exports = {
-    ignore: ["dist/*", "/bunny-rest/*","/node_modules/*"]
+    ignore: ["dist/**.*", "/bunny-back-end-tpl/**.*","/node_modules/**.*"]
 };

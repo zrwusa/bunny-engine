@@ -1,87 +1,109 @@
-import {existsSync, mkdirSync, readdirSync, statSync, readFile,writeFile, renameSync} from 'fs';
-import type {Stats} from 'fs';
+import * as fs from 'fs-extra';
+import {globSync} from 'glob';
+import {minimatch} from 'minimatch';
 import * as path from 'path';
-const sourceDir = 'bunny-back-end-tpl'; // origin dir
 
-// exclude dirs
-function shouldExcludeDirectory(directory: string): boolean {
-    console.log(directory);
-    // So far, just ignore the directory, no copying no replacement no rename.
-    const excludedDirectories: string[] = ['node_modules', '.git', 'src/libs'];
-    return excludedDirectories.includes(directory);
+// Config of replacement
+const replaceConfig: { [key: string]: string } = {
+    'old': 'new',
+};
+
+// Config of renaming files
+const renameConfig: { [key: string]: string } = {
+    'old': 'new',
+};
+
+// Ignore rules of writing files
+const writeFileIgnoreRules: string[] = [
+    // Add write files ignore rules here
+    'dir/**/*',
+    'node_modules/**/*'
+];
+
+// Ignore rules of content replacement
+const replaceIgnoreRules: string[] = [
+    // Add replace ignore rules here
+    'dir1/dir2/*.txt',
+];
+
+// Ignore rules of renaming
+const renameIgnoreRules: string[] = [
+    // Add rename ignore rules here
+    'dir1/dir2/*.ts',
+];
+
+// Source files directory
+const sourceDir = 'source-dir'; // The files in the directory need to be content replaced, renamed and written to the dist
+const projectName = 'output-dir';
+const outputDir = `dist/${projectName}`; // The directory for storing the content replaced, renamed and written files
+
+// Iterate, replace content, rename and write the files
+async function processFiles(directory: string, outputPath: string) {
+    const files = globSync(`${directory}/**/*`, { nodir: true });
+
+    for (const file of files) {
+        if (shouldIgnore(file, writeFileIgnoreRules)) continue;
+
+        const relativePath = file.replace(directory, '');
+        const newFilePath = outputPath + relativePath;
+
+        await fs.ensureDirSync(outputPath);
+        await fs.copySync(file, newFilePath);
+
+        if (!shouldIgnore(file, replaceIgnoreRules)) {
+            await replaceInFile(newFilePath, replaceConfig);
+        }
+
+        if (!shouldIgnore(file, renameIgnoreRules)) {
+            await renameFile(newFilePath, renameConfig);
+        }
+    }
 }
 
-// replace and rename
-function replaceContentAndRename(directoryPath: string, searchStrings: string[], replacements: string[], outputDir: string): void {
-
-    if (!existsSync(outputDir)) {
-        mkdirSync(outputDir, { recursive: true });
-    }
-
-    const files: string[] = readdirSync(directoryPath);
-
-    files.forEach((file: string) => {
-        const filePath: string = path.join(directoryPath, file);
-        const stats: Stats = statSync(filePath);
-
-        if (stats.isDirectory()) {
-            console.log('---', directoryPath);
-            if (shouldExcludeDirectory(file)) {
-                console.log(`Skipping directory: ${filePath}`);
-                return;
-            }
-
-            replaceContentAndRename(filePath, searchStrings, replacements, path.join(outputDir, file));
-        } else {
-            readFile(filePath, 'utf8', (err, data) => {
-                if (err) {
-                    console.error(`Error reading the file: ${err}`);
-                    return;
-                }
-
-                let updatedData: string = data;
-                for (let i = 0; i < searchStrings.length; i++) {
-                    const searchString: string = searchStrings[i];
-                    const replacement: string = replacements[i];
-                    const regex = new RegExp(searchString, 'g');
-                    updatedData = updatedData.replace(regex, replacement);
-                }
-
-                const outputPath: string = path.join(outputDir, file);
-
-                writeFile(outputPath, updatedData, 'utf8', (err) => {
-                    if (err) {
-                        console.error(`Error writing to the file: ${err}`);
-                        return;
-                    }
-
-                    // console.log(`File ${outputPath} content replaced successfully.`);
-
-
-                    let newFileName: string = file;
-                    for (let i = 0; i < searchStrings.length; i++) {
-                        const searchString: string = searchStrings[i];
-                        const replacement: string = replacements[i];
-                        const regex = new RegExp(searchString, 'g');
-                        newFileName = newFileName.replace(regex, replacement);
-                    }
-
-                    const newFilePath: string = path.join(outputDir, newFileName);
-                    renameSync(outputPath, newFilePath);
-                    // console.log(`File ${outputPath} renamed to ${newFileName}.`);
-                });
-            });
-        }
+// To assert whether the files need to be ignored
+function shouldIgnore(filePath: string, ignoreRules: string[]) {
+    const relativeFilePath = path.relative(sourceDir, filePath);
+    return ignoreRules.some((rule) => {
+        const ruleRegex = minimatch.makeRe(rule);
+        if (ruleRegex) return ruleRegex.test(relativeFilePath);
+        else return false;
     });
 }
 
+// Replace the content of a file
+async function replaceInFile(filePath: string, replaceRules: { [key: string]: string }) {
+    let content = await fs.readFile(filePath, 'utf-8');
 
-const projectName = 'dog-raise-app';
+    for (const [search, replace] of Object.entries(replaceRules)) {
+        const searchRegex = new RegExp(search, 'g');
+        content = content.replace(searchRegex, replace);
+    }
 
-const outputDir = `dist/${projectName}`;
-const replaceConfig = {
-    "bunny_back_end_tpl": "dog_raise_app",
-    "bunny-back-end-tpl": "dog-raise-app",
+    await fs.writeFile(filePath, content, 'utf-8');
 }
 
-replaceContentAndRename(sourceDir, Object.keys(replaceConfig), Object.values(replaceConfig), outputDir);
+// Rename a file
+async function renameFile(filePath: string, renameRules: { [key: string]: string }) {
+    let newFilePath = filePath;
+
+    for (const [search, replace] of Object.entries(renameRules)) {
+        const searchRegex = new RegExp(search, 'g');
+        newFilePath = newFilePath.replace(searchRegex, replace);
+    }
+
+    if (filePath !== newFilePath) {
+        await fs.rename(filePath, newFilePath);
+    }
+}
+
+
+async function runFileReplacer() {
+    try {
+        await processFiles(sourceDir, outputDir);
+        console.log('File replacement completed successfully!');
+    } catch (error) {
+        console.error('An error occurred while replacing files:', error);
+    }
+}
+
+runFileReplacer().then();
