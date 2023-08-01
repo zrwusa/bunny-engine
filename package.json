@@ -1,6 +1,6 @@
 {
   "name": "bunny-engine",
-  "version": "1.0.0",
+  "version": "1.1.5",
   "description": "bunny-engine description",
   "main": "index.ts",
   "repository": "https://github.com/zrwusa/bunny-engine.git",
@@ -22,11 +22,8 @@
     "typescript": "4.9.5"
   },
   "dependencies": {
-    "@types/globby": "^9.1.0",
     "fs-extra": "^11.1.1",
     "glob": "^10.3.3",
-    "glob-gitignore": "^1.0.14",
-    "globby": "^13.2.2",
     "minimatch": "^9.0.3"
   }
 }

@@ -9,6 +9,8 @@
       <excludeFolder url="file://$MODULE_DIR$/bunny-rest" />
       <excludeFolder url="file://$MODULE_DIR$/node_modules" />
       <excludeFolder url="file://$MODULE_DIR$/note" />
+      <excludeFolder url="file://$MODULE_DIR$/templates/back-end/src/libs/zod-to-openapi/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/templates" />
     </content>
     <content url="file://$MODULE_DIR$/node_modules" />
     <orderEntry type="inheritedJdk" />

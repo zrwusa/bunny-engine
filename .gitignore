@@ -4,8 +4,8 @@
 /dist
 /node_modules
 /note
-bunny-back-end-tpl/node_modules
-bunny-back-end-tpl/.vscode/
-bunny-back-end-tpl/.idea/
+/templates/back-end/node_modules
+/templates/back-end/.vscode/
+/templates/back-end/.idea/
 
 yarn-error.log
