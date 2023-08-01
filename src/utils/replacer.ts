@@ -1,8 +1,8 @@
+import type {Config, Options, Rules} from '../types';
 import {copySync, ensureDirSync, writeFileSync, readFileSync, renameSync} from 'fs-extra';
 import {globSync} from 'glob';
 import {minimatch} from 'minimatch';
 import * as path from 'path';
-import type {Config, Options, Rules} from '../types';
 
 export class Replacer {
     private readonly sourceDir: string;
@@ -12,7 +12,7 @@ export class Replacer {
     private readonly readFileIgnoreRules: Rules;
     private readonly replaceIgnoreRules: Rules;
     private readonly renameIgnoreRules: Rules;
-    private readonly encoding: BufferEncoding = 'utf-8';
+    private readonly encoding: BufferEncoding;
 
     constructor(options: Options) {
         const {
@@ -66,7 +66,6 @@ export class Replacer {
             else return false;
         });
     }
-
 
     // Replace the content of a file
     async replaceInFile(filePath: string, replaceRules: { [key: string]: string }) {
