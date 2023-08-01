@@ -10,4 +10,11 @@ export type Options = {
     readFileIgnoreRules: Rules,
     replaceIgnoreRules: Rules,
     renameIgnoreRules: Rules,
+    logConfig?: LogConfig,
+}
+
+export type LogConfig = {
+    ignore?: { result?: boolean, path?: boolean, type?: boolean, rule?: boolean },
+    replace?: { path?: boolean, rule?: boolean },
+    rename?: { path?: boolean, rule?: boolean, renamed?: boolean },
 }

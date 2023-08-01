@@ -7,5 +7,6 @@
 /templates/back-end/node_modules
 /templates/back-end/.vscode/
 /templates/back-end/.idea/
+/logs
 
 yarn-error.log

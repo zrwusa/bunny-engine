@@ -21,16 +21,18 @@ const renameConfig: { [key: string]: string } = {
 // Ignore rules of writing files
 const readFileIgnoreRules: string[] = [
     '**/node_modules/**',
+    '**/.DS_Store/**',
+    '.git/**',
 ];
 
 // Ignore rules of content replacement
 const replaceIgnoreRules: string[] = [
-    'dir1/dir2/*.txt',
+    // 'dir1/dir2/*.txt',
 ];
 
 // Ignore rules of renaming
 const renameIgnoreRules: string[] = [
-    'dir1/dir2/*.ts',
+    // 'dir1/dir2/*.ts',
 ];
 
 const replacer = new Replacer({

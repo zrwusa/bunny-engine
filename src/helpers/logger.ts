@@ -2,7 +2,8 @@ import pino from 'pino';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const appRoot = process.cwd(), logsDir = path.join(appRoot, 'logs'), logFilePath = path.join(logsDir, 'bunny-rest.log');
+const appRoot = process.cwd(), logsDir = path.join(appRoot, 'logs'),
+    logFilePath = path.join(logsDir, 'bunny-engine.log');
 
 if (!fs.existsSync(logsDir)) fs.mkdirSync(logsDir);
 if (!fs.existsSync(logFilePath)) fs.writeFileSync(logFilePath, '');
