@@ -1,4 +1,4 @@
-import {appendIntoFile, insertIntoFile, toCamelCase, toKebabCase, toPascalCase, toSnakeCase} from '../utils';
+import {insertIntoFile, toKebabCase, toPascalCase, toSnakeCase} from '../utils';
 import {apiDefinition} from '../templates/materials';
 import {BunnyEntity} from '../types';
 import fs from 'fs';
@@ -22,31 +22,9 @@ export const makeEntity = (entity: BunnyEntity) => {
     ).join('')
 }
 
-export const writeEntities = (outputPath: string,
-                              entitiesPath: string = 'src/entities/',) => {
-    const {entities} = apiDefinition;
-    for (const entity of entities) {
-        const xxx = generateEntity(entity);
-        // console.log(xxx);
-        const {name} = entity;
-
-        const pathR = path.join(outputPath, entitiesPath);
-        const pathHelpers = path.join(outputPath, 'src/helpers/')
-        appendIntoFile(`${pathR}index.ts`,  `export * from './${toKebabCase(name)}-entity';
-`, false);
-
-        insertIntoFile(`${pathHelpers}postgres-data-source.ts`, `
-} from '../entities';`, `,
-    ${toPascalCase(name)}Entity`);
-        insertIntoFile(`${pathHelpers}postgres-data-source.ts`, `],
-    synchronize: true,`, `, ${toPascalCase(name)}Entity`);
-        fs.writeFileSync(`${pathR}${toKebabCase(name)}-entity.ts`, xxx, 'utf8');
-    }
-}
 export const generateEntity = (entity: BunnyEntity) => {
     const {name} = entity;
-    const output = `
-import {Column, Entity} from 'typeorm';
+    return `import {Column, Entity} from 'typeorm';
 import {CommonEntity} from './common-entity';
 
 @Entity('${toSnakeCase(name)}')
@@ -55,5 +33,20 @@ ${makeEntity(entity)}
     
 }
 `;
-return output;
+}
+
+export const writeEntities = (outputPath: string, entitiesPath: string = 'src/entities/',) => {
+    const {entities} = apiDefinition;
+    for (const entity of entities) {
+        const data = generateEntity(entity);
+        const {name} = entity;
+        const entitiesPathR = path.join(outputPath, entitiesPath);
+        const helpersPathR = path.join(outputPath, 'src/helpers/');
+        fs.writeFileSync(`${entitiesPathR}${toKebabCase(name)}-entity.ts`, data, 'utf8');
+        insertIntoFile(`${entitiesPathR}index.ts`, '/*@1*/', `export * from './${toKebabCase(name)}-entity';
+`, false);
+        insertIntoFile(`${helpersPathR}postgres-data-source.ts`, '/*@1*/', `,
+    ${toPascalCase(name)}Entity`);
+        insertIntoFile(`${helpersPathR}postgres-data-source.ts`, '/*@2*/', `, ${toPascalCase(name)}Entity`);
+    }
 }

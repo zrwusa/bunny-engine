@@ -12,3 +12,16 @@ export const xRefreshTokenSchema = object({
         })
     }
 )
+
+export const acceptLanguageSchema = object({
+        'Accept-Language': string().openapi({
+            param: {
+                name: 'Accept-Language',
+                in: 'header',
+                description: 'Accept Language for I18n',
+                required: false,
+            },
+            example: 'en'
+        })
+    }
+)

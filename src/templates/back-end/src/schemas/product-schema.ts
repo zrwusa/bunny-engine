@@ -6,7 +6,7 @@ import {
     makeSecurity,
     openApiRegistry
 } from '../helpers';
-import {xRefreshTokenSchema} from './auth-schema';
+import {acceptLanguageSchema, xRefreshTokenSchema} from './auth-schema';
 import {BLProduct} from '../constants';
 import {E_ProtocolSchemaType} from '../types';
 
@@ -142,7 +142,7 @@ openApiRegistry.registerPath({
     summary: 'Get product list',
     tags: ['Product'],
     security: makeSecurity(),
-    request: {params: queryGetList.merge(xRefreshTokenSchema),},
+    request: {params: queryGetList.merge(xRefreshTokenSchema).merge(acceptLanguageSchema),},
     responses: {
         ...commonOpenApiResponseContent,
         200: makeOpenApiResponse({

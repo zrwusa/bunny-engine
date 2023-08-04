@@ -1,6 +1,6 @@
 import {
-    appendIntoFile,
     getRangeFromPrecisionScale,
+    insertIntoFile,
     toConstantCase,
     toKebabCase,
     toPascalCase,
@@ -17,11 +17,11 @@ export const makeSchema = (entity: BunnyEntity) => {
             const {type, nullable, maxLength, minLength, maximum, minimum, precision, scale, example} = properties[key];
             return `
        ${key}: ${type[1]}()
-        ${typeof minLength === 'number'? '.min('+`${minLength}`+')' : ''}
-        ${typeof maxLength === 'number'? '.max('+`${maxLength}`+')' : ''}
-        ${typeof minimum === 'number'? '.gte('+`${minimum}`+')': (typeof precision === 'number' && typeof scale === 'number' && precision > scale) ? '.gte('+`${getRangeFromPrecisionScale(precision, scale).minimum}`+')': ''} 
-        ${typeof maximum === 'number'? '.lte('+`${maximum}`+')': (typeof precision === 'number' && typeof scale === 'number' && precision > scale) ? '.gte('+`${getRangeFromPrecisionScale(precision, scale).maximum}`+')': ''}
-        ${typeof example === 'string' ? '.openapi({example: '+`'${example}'` +'})' : '' } 
+        ${typeof minLength === 'number' ? '.min(' + `${minLength}` + ')' : ''}
+        ${typeof maxLength === 'number' ? '.max(' + `${maxLength}` + ')' : ''}
+        ${typeof minimum === 'number' ? '.gte(' + `${minimum}` + ')' : (typeof precision === 'number' && typeof scale === 'number' && precision > scale) ? '.gte(' + `${getRangeFromPrecisionScale(precision, scale).minimum}` + ')' : ''} 
+        ${typeof maximum === 'number' ? '.lte(' + `${maximum}` + ')' : (typeof precision === 'number' && typeof scale === 'number' && precision > scale) ? '.gte(' + `${getRangeFromPrecisionScale(precision, scale).maximum}` + ')' : ''}
+        ${typeof example === 'string' ? '.openapi({example: ' + `'${example}'` + '})' : ''} 
         ${nullable ? '.optional()' : ''}
         ,
 `
@@ -29,23 +29,20 @@ export const makeSchema = (entity: BunnyEntity) => {
     ).join('')
 }
 
-export const writeSchemas = (outputPath: string,
-                             schemasPath: string = 'src/schemas/') => {
+export const writeSchemas = (outputPath: string, schemasPath: string = 'src/schemas/') => {
     const {entities} = apiDefinition;
     for (const entity of entities) {
-        const xxx = generateSchema(entity);
-        // console.log(xxx);
+        const data = generateSchema(entity);
         const {name} = entity;
-        const pathR = path.join(outputPath, schemasPath);
-        appendIntoFile(`${pathR}index.ts`,  `export * from './${toKebabCase(name)}-schema';
+        const schemasPathR = path.join(outputPath, schemasPath);
+        fs.writeFileSync(`${schemasPathR}${toKebabCase(name)}-schema.ts`, data, 'utf8');
+        insertIntoFile(`${schemasPathR}index.ts`, '/*@1*/', `export * from './${toKebabCase(name)}-schema';
 `);
-        fs.writeFileSync(`${pathR}${toKebabCase(name)}-schema.ts`, xxx, 'utf8');
     }
 }
 export const generateSchema = (entity: BunnyEntity) => {
     const {name} = entity;
-    const output = `
-import {number, object, string, TypeOf} from 'zod';
+    return `import {number, object, string, TypeOf} from 'zod';
 import {
     commonOpenApiResponseContent,
     makeOpenApiRequestBody,
@@ -53,7 +50,7 @@ import {
     makeSecurity,
     openApiRegistry
 } from '../helpers';
-import {xRefreshTokenSchema} from './auth-schema';
+import {acceptLanguageSchema, xRefreshTokenSchema} from './auth-schema';
 import {BL${toPascalCase(name)}} from '../constants';
 import {E_ProtocolSchemaType} from '../types';
 
@@ -119,7 +116,7 @@ openApiRegistry.registerPath({
     tags: ['${toTitleCase(name)}'],
     security: makeSecurity(),
     request: {
-        params: xRefreshTokenSchema,
+        params: xRefreshTokenSchema.merge(acceptLanguageSchema),
         body: makeOpenApiRequestBody(body),
     },
     responses: {
@@ -148,7 +145,7 @@ openApiRegistry.registerPath({
     summary: 'Get a single ${toTitleCase(name)}',
     tags: ['${toTitleCase(name)}'],
     security: makeSecurity(),
-    request: {params: params.merge(xRefreshTokenSchema),},
+    request: {params: params.merge(xRefreshTokenSchema).merge(acceptLanguageSchema),},
     responses: {
         ...commonOpenApiResponseContent,
         200: makeOpenApiResponse({
@@ -175,7 +172,7 @@ openApiRegistry.registerPath({
     summary: 'Get ${toTitleCase(name)} list',
     tags: ['${toTitleCase(name)}'],
     security: makeSecurity(),
-    request: {params: queryGetList.merge(xRefreshTokenSchema),},
+    request: {params: queryGetList.merge(xRefreshTokenSchema).merge(acceptLanguageSchema),},
     responses: {
         ...commonOpenApiResponseContent,
         200: makeOpenApiResponse({
@@ -214,7 +211,7 @@ openApiRegistry.registerPath({
     tags: ['${toTitleCase(name)}'],
     security: makeSecurity(),
     request: {
-        params: params.merge(xRefreshTokenSchema),
+        params: params.merge(xRefreshTokenSchema).merge(acceptLanguageSchema),
         body: makeOpenApiRequestBody(body),
     },
     responses: {
@@ -239,7 +236,7 @@ openApiRegistry.registerPath({
     summary: 'Delete a single ${toTitleCase(name)}',
     tags: ['${toTitleCase(name)}'],
     security: makeSecurity(),
-    request: {params: params.merge(xRefreshTokenSchema),},
+    request: {params: params.merge(xRefreshTokenSchema).merge(acceptLanguageSchema),},
     responses: {
         ...commonOpenApiResponseContent,
         200: makeOpenApiResponse({
@@ -254,5 +251,4 @@ openApiRegistry.registerPath({
     },
 });
 `;
-return output;
 }

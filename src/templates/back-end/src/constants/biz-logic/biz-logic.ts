@@ -2,22 +2,17 @@ import type {BLAndTrans, BLAndTransKeys} from '../../types';
 import {BLSystem} from './system';
 import {BLUser} from './user';
 import {BLAuth} from './auth';
-import {BLExample} from './example';
 import {BLProduct} from './product';
 import {BLOrder} from './order';
-import {BLPost} from './post';
-import {BLMaterial} from './material';
-
+/*@1*/
 
 export const BL: BLAndTrans = {
     ...BLSystem,
     ...BLUser,
     ...BLAuth,
-    ...BLExample,
     ...BLProduct,
     ...BLOrder,
-    ...BLPost,
-    ...BLMaterial,
+    /*@2*/
 }
 
 const set = new Set<string>();

@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "ts-node-dev index.ts",
     "build": "tsc",
-    "gen": "rm -rf dist && ts-node index.ts"
+    "generate": "rm -rf dist && ts-node index.ts"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",

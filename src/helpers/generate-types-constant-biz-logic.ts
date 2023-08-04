@@ -6,8 +6,7 @@ import path from 'path';
 
 export const makeTypesConstantBizLogic = (entity: BunnyEntity) => {
     const {name} = entity;
-    return `
-import { BLCodeAndTrans } from "./common";
+    return `import { BLCodeAndTrans } from "./common";
 
 export type BLAndTrans${toPascalCase(name)} = {
     CREATE_${toConstantCase(name)}_SUCCESS: BLCodeAndTrans;
@@ -17,31 +16,23 @@ export type BLAndTrans${toPascalCase(name)} = {
     UPDATE_${toConstantCase(name)}_SUCCESS: BLCodeAndTrans;
     DELETE_${toConstantCase(name)}_SUCCESS: BLCodeAndTrans;
 };
-
 `
 }
 
-export const makeTypesConstantBizLogics = (outputPath: string,
-                                           typesConstantsPath: string = 'src/types/constants/biz-logic/',) => {
+export const makeTypesConstantBizLogics = (outputPath: string, typesConstantsPath: string = 'src/types/constants/biz-logic/',) => {
     const {entities} = apiDefinition;
     for (const entity of entities) {
-        const xxx = makeTypesConstantBizLogic(entity);
-        // console.log(xxx);
+        const data = makeTypesConstantBizLogic(entity);
         const {name} = entity;
-
-        const pathR = path.join(outputPath, typesConstantsPath);
-        insertIntoFile(`${pathR}index.ts`, 'export * from \'./common\';', `import {BLAndTrans${toPascalCase(name)}} from './${toKebabCase(name)}';
-    `);
-        insertIntoFile(`${pathR}common.ts`, 'APP_FACEBOOK = \'APP_FACEBOOK\'', `APP_${toConstantCase(name)} = 'APP_${toConstantCase(name)}',
+        const typesConstantsPathR = path.join(outputPath, typesConstantsPath);
+        fs.writeFileSync(`${typesConstantsPathR}${toKebabCase(name)}.ts`, data, 'utf8');
+        insertIntoFile(`${typesConstantsPathR}index.ts`, '/*@1*/', `import {BLAndTrans${toPascalCase(name)}} from './${toKebabCase(name)}';
+`);
+        insertIntoFile(`${typesConstantsPathR}common.ts`, '/*@1*/', `APP_${toConstantCase(name)} = 'APP_${toConstantCase(name)}',
 `, false);
-        insertIntoFile(`${pathR}index.ts`, `;
-
-export type BLAndTransKeys = keyof BLAndTrans;`, ` & BLAndTrans${toPascalCase(name)}
+        insertIntoFile(`${typesConstantsPathR}index.ts`, `/*@2*/`, ` 
+    & BLAndTrans${toPascalCase(name)}`, false);
+        insertIntoFile(`${typesConstantsPathR}index.ts`,  '/*@3*/',`export * from './${toKebabCase(name)}';
 `, false);
-        insertIntoFile(`${pathR}index.ts`,  'export type BLAndTrans =',`export * from './${toKebabCase(name)}';
-        
-`, false);
-
-        fs.writeFileSync(`${pathR}${toKebabCase(name)}.ts`, xxx, 'utf8');
     }
 }

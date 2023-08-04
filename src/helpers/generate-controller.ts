@@ -1,4 +1,4 @@
-import {toPascalCase, toCamelCase, toConstantCase, insertIntoFile, toKebabCase, appendIntoFile} from '../utils';
+import {insertIntoFile, toCamelCase, toConstantCase, toKebabCase, toPascalCase} from '../utils';
 import {apiDefinition} from '../templates/materials';
 import {BunnyEntity} from '../types';
 import * as fs from 'fs';
@@ -6,8 +6,7 @@ import path from 'path';
 
 export const makeController = (entity: BunnyEntity) => {
     const {name} = entity;
-    return `
-import type {NextFunction, Request, Response} from 'express';
+    return `import type {NextFunction, Request, Response} from 'express';
 
 import {create${toPascalCase(name)}, delete${toPascalCase(name)}, get${toPascalCase(name)}, get${toPascalCase(name)}List, update${toPascalCase(name)},} from '../services';
 import {wrapSend} from '../helpers';
@@ -79,20 +78,17 @@ export async function delete${toPascalCase(name)}Ctrl(req: Request<Delete${toPas
         next(err);
     }
 }
-
 `
 }
 
-export const writeControllers = (outputPath: string,
-                                 controllersPath: string = 'src/controllers/') => {
+export const writeControllers = (outputPath: string, controllersPath: string = 'src/controllers/') => {
     const {entities} = apiDefinition;
     for (const entity of entities) {
-        const xxx = makeController(entity);
-        // console.log(xxx);
+        const data = makeController(entity);
         const {name} = entity;
-        const pathR = path.join(outputPath, controllersPath);
-        appendIntoFile(`${pathR}index.ts`,  `export * from './${toKebabCase(name)}-controller';
+        const controllersPathR = path.join(outputPath, controllersPath);
+        fs.writeFileSync(`${controllersPathR}${toKebabCase(name)}-controller.ts`, data, 'utf8');
+        insertIntoFile(`${controllersPathR}index.ts`, '/*@1*/', `export * from './${toKebabCase(name)}-controller';
 `);
-        fs.writeFileSync(`${pathR}${toKebabCase(name)}-controller.ts`, xxx, 'utf8');
     }
 }

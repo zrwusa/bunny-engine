@@ -6,8 +6,7 @@ import path from 'path';
 
 export const makeRoute = (entity: BunnyEntity) => {
     const {name} = entity;
-    return `
-import express from 'express';
+    return `import express from 'express';
 import {jwtAuth, validateRequest} from '../../middlewares';
 import {
     create${toPascalCase(name)}Schema,
@@ -39,21 +38,16 @@ ${toCamelCase(name)}Router.delete('/:id', [jwtAuth, validateRequest(delete${toPa
 export {${toCamelCase(name)}Router};
 `
 }
-export const writeRoutes = (
-    outputPath: string,
-    routesPath: string = 'src/routes/v1/',
-) => {
-
+export const writeRoutes = (outputPath: string,routesPath: string = 'src/routes/v1/') => {
     const {entities} = apiDefinition;
     for (const entity of entities) {
-        const xxx = makeRoute(entity);
+        const data = makeRoute(entity);
         const {name} = entity;
-        const pathR = path.join(outputPath, routesPath);
-        insertIntoFile(`${pathR}router-v1.ts`, 'const routerV1 = express.Router();', `import {${toCamelCase(name)}Router} from './${toKebabCase(name)}';
+        const routesPathR = path.join(outputPath, routesPath);
+        fs.writeFileSync(`${routesPathR}${toKebabCase(name)}.ts`, data, 'utf8');
+        insertIntoFile(`${routesPathR}router-v1.ts`, '/*@1*/', `import {${toCamelCase(name)}Router} from './${toKebabCase(name)}';
 `, false);
-        insertIntoFile(`${pathR}router-v1.ts`, 'export {routerV1};', `routerV1.use('/${toKebabCase(name)}s', ${toCamelCase(name)}Router);
+        insertIntoFile(`${routesPathR}router-v1.ts`, '/*@2*/', `routerV1.use('/${toKebabCase(name)}s', ${toCamelCase(name)}Router);
 `, false);
-
-        fs.writeFileSync(`${pathR}${toKebabCase(name)}.ts`, xxx, 'utf8');
     }
 }

@@ -1,11 +1,11 @@
 import {
+    appendIntoFile,
+    insertIntoFile,
+    toConstantCase,
+    toKebabCase,
     toPascalCase,
     toSentenceCase,
-    toTitleCase,
-    toConstantCase,
-    appendIntoFile,
-    toKebabCase,
-    insertIntoFile
+    toTitleCase
 } from '../utils';
 import {apiDefinition} from '../templates/materials';
 import {BunnyEntity} from '../types';
@@ -14,8 +14,7 @@ import path from 'path';
 
 export const makeConstantBizLogic = (entity: BunnyEntity) => {
     const {name, zhName} = entity;
-    return `
-import {BLAndTrans${toPascalCase(name)}, E_BL_CATE} from '../../types';
+    return `import {BLAndTrans${toPascalCase(name)}, E_BL_CATE} from '../../types';
 
 export const BL${toPascalCase(name)}: BLAndTrans${toPascalCase(name)} = {
     CREATE_${toConstantCase(name)}_SUCCESS: {
@@ -55,28 +54,20 @@ export const BL${toPascalCase(name)}: BLAndTrans${toPascalCase(name)} = {
         zh: '删除${zhName}成功'
     },
 }
-
 `
 }
 
-export const writeConstantBizLogics = (outputPath: string,
-                                       constantsPath: string = 'src/constants/biz-logic/',) => {
+export const writeConstantBizLogics = (outputPath: string,constantsPath: string = 'src/constants/biz-logic/',) => {
     const {entities} = apiDefinition;
     for (const entity of entities) {
-        const xxx = makeConstantBizLogic(entity);
-        // console.log(xxx);
+        const data = makeConstantBizLogic(entity);
         const {name} = entity;
-
-        const pathR = path.join(outputPath, constantsPath);
-        appendIntoFile(`${pathR}index.ts`,  `export * from './${toKebabCase(name)}';
+        const constantsPathR = path.join(outputPath, constantsPath);
+        fs.writeFileSync(`${constantsPathR}${toKebabCase(name)}.ts`, data, 'utf8');
+        appendIntoFile(`${constantsPathR}index.ts`, `export * from './${toKebabCase(name)}';
 `, false);
-        insertIntoFile(`${pathR}biz-logic.ts`, 'export const BL: BLAndTrans = {', `import { BL${toPascalCase(name)} } from './${toKebabCase(name)}';
+        insertIntoFile(`${constantsPathR}biz-logic.ts`, '/*@1*/', `import { BL${toPascalCase(name)} } from './${toKebabCase(name)}';
 `, false);
-
-        insertIntoFile(`${pathR}biz-logic.ts`, `}
-
-const set = new Set<string>();`, `...BL${toPascalCase(name)},`);
-
-        fs.writeFileSync(`${pathR}${toKebabCase(name)}.ts`, xxx, 'utf8');
+        insertIntoFile(`${constantsPathR}biz-logic.ts`, `/*@2*/`, `...BL${toPascalCase(name)},`);
     }
 }

@@ -6,10 +6,11 @@ import {writeServices} from './src/helpers/generate-service';
 import {writeConstantBizLogics} from './src/helpers/generate-constant-biz-logic';
 import {makeTypesConstantBizLogics} from './src/helpers/generate-types-constant-biz-logic';
 import {writeSchemas} from './src/helpers/generate-schema';
+import {toKebabCase, toSnakeCase} from './src/utils';
 
 async function main() {
     try {
-        const projectName = 'dog-raise';
+        const projectName = 'my-app';
 
         // Source files directory
         const sourceDir = 'src/templates/back-end'; // The files in the directory need to be content replaced, renamed and written to the dist
@@ -17,14 +18,14 @@ async function main() {
 
         // Config of replacement
         const replaceConfig: { [key: string]: string } = {
-            'bunny_rest': 'dog_raise',
-            'bunny-rest': 'dog-raise',
+            'bunny_rest': toSnakeCase(projectName),
+            'bunny-rest': toKebabCase(projectName),
         };
 
         // Config of renaming files
         const renameConfig: { [key: string]: string } = {
-            'bunny_rest': 'dog_raise',
-            'bunny-rest': 'dog-raise',
+            'bunny_rest': toSnakeCase(projectName),
+            'bunny-rest': toKebabCase(projectName),
         };
 
         // Ignore rules of writing files
@@ -56,7 +57,7 @@ async function main() {
 
         await generator.run();
         writeEntities(outputDir, 'src/entities/');
-        writeRoutes( outputDir, 'src/routes/v1/');
+        writeRoutes(outputDir, 'src/routes/v1/');
         writeConstantBizLogics(outputDir, 'src/constants/biz-logic/');
         makeTypesConstantBizLogics(outputDir, 'src/types/constants/biz-logic/');
         writeControllers(outputDir, 'src/controllers/');

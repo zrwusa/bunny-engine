@@ -13,15 +13,9 @@ export enum E_BL_CATE {
     AUTH = 'AUTH',
 
     APP = 'APP',
-    APP_DEMO = 'APP_DEMO',
-    APP_USER = 'APP_USER',
-    APP_PRODUCT = 'APP_PRODUCT',
-    APP_ORDER = 'APP_ORDER',
-    APP_POST = 'APP_POST',
-    APP_MATERIAL = 'APP_MATERIAL',
+    APP_USER = 'APP_USER',       // The business lines responsible for users
+    APP_PRODUCT = 'APP_PRODUCT', // The business lines responsible for products
+    APP_ORDER = 'APP_ORDER',     // The business lines responsible for orders
 
-    APP_FACEBOOK = 'APP_FACEBOOK',     // The business lines responsible for integrating with Facebook
-    APP_INFLUENCER = 'APP_INFLUENCER', // The business lines responsible for integrating with the influencer system
-    APP_OLYMPIC = 'APP_OLYMPIC',       // The business lines responsible for integrating with the Olympic system
-    APP_EMPLOYEE = 'APP_EMPLOYEE',     // The business lines responsible for integrating with the employee system
+    /*@1*/
 }

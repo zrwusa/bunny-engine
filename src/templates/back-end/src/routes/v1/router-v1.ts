@@ -1,14 +1,11 @@
 import express from 'express';
 import {jwtAuth} from '../../middlewares';
 import {getConfigCtrl, getPingCtrl} from '../../controllers';
-import {postRouter} from './post';
 import {orderRouter} from './order';
 import {userRouter} from './user';
-import {demoThunkRouter} from './demo-thunk';
 import {sessionRouter} from './session';
 import {productRouter} from './product';
-import {materialRouter} from './material';
-
+/*@1*/
 const routerV1 = express.Router();
 
 routerV1.get('/ping', getPingCtrl);
@@ -21,12 +18,6 @@ routerV1.use('/users', userRouter);
 
 routerV1.use('/products', productRouter);
 
-routerV1.use('/posts', postRouter);
-
 routerV1.use('/orders', orderRouter);
-
-routerV1.use('/demo-thunks', demoThunkRouter);
-
-routerV1.use('/materials', materialRouter);
-
+/*@2*/
 export {routerV1};
