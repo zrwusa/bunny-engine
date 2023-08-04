@@ -1,1 +1,0 @@
-temporarily support https://github.com/zrwusa/bunny-rest.git 
