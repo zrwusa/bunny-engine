@@ -7,8 +7,8 @@ import {logger} from '../helpers';
 import {IgnoreType} from '../constants';
 
 export class Replacer {
-    private readonly sourceDir: string;
-    private readonly outputDir: string;
+    private readonly sourcePath: string;
+    private readonly outputPath: string;
     private readonly replaceConfig: Config;
     private readonly renameConfig: Config;
     private readonly readFileIgnoreRules: Rules;
@@ -19,8 +19,8 @@ export class Replacer {
 
     constructor(options: Options) {
         const {
-            sourceDir,
-            outputDir,
+            sourcePath,
+            outputPath,
             replaceConfig,
             renameConfig,
             readFileIgnoreRules,
@@ -28,8 +28,8 @@ export class Replacer {
             renameIgnoreRules,
             logConfig,
         } = options;
-        this.sourceDir = sourceDir;
-        this.outputDir = outputDir;
+        this.sourcePath = sourcePath;
+        this.outputPath = outputPath;
         this.replaceConfig = replaceConfig;
         this.renameConfig = renameConfig;
         this.readFileIgnoreRules = readFileIgnoreRules;
@@ -50,8 +50,8 @@ export class Replacer {
     }
 
     // Replace the content of a file
-    async replaceInFile(filePath: string, replaceRules: { [key: string]: string }) {
-        const {encoding, outputDir} = this;
+    replaceInFile(filePath: string, replaceRules: { [key: string]: string }) {
+        const {encoding, outputPath} = this;
 
         let content = readFileSync(filePath, {encoding});
         let contentStr = content.toString();
@@ -69,7 +69,7 @@ export class Replacer {
             const {replace} = logConfig;
             if (replace) {
                 let logMsg = '';
-                const relativeFilePath = path.relative(outputDir, filePath);
+                const relativeFilePath = path.relative(outputPath, filePath);
                 if (isReplaced) {
                     if (replace.path) logMsg += `Successfully replaced file: ${relativeFilePath}`;
                     if (replace.rule) logMsg += `, rule: ${replaceRules}`;
@@ -83,7 +83,7 @@ export class Replacer {
     }
 
     // Rename a file
-    async renameFile(filePath: string, renameRules: { [key: string]: string }) {
+    renameFile(filePath: string, renameRules: { [key: string]: string }) {
         let newFilePath = filePath;
 
         for (const [search, replace] of Object.entries(renameRules)) {
@@ -93,15 +93,15 @@ export class Replacer {
 
         if (filePath !== newFilePath) {
             renameSync(filePath, newFilePath);
-            const {logConfig, outputDir} = this;
+            const {logConfig, outputPath} = this;
             if (logConfig) {
                 const {rename} = logConfig;
                 if (rename) {
                     let logMsg = '';
-                    const relativeFilePath = path.relative(outputDir, filePath);
+                    const relativeFilePath = path.relative(outputPath, filePath);
                     if (rename.path) logMsg += `Successfully renamed  file: ${relativeFilePath}`;
                     if (rename.rule) logMsg += `, rule: ${renameRules}`;
-                    const relativeNewFilePath = path.relative(outputDir, newFilePath);
+                    const relativeNewFilePath = path.relative(outputPath, newFilePath);
                     if (rename.renamed) logMsg += ` -> file: ${relativeNewFilePath}`;
                     logger.info(logMsg);
                 }
@@ -109,9 +109,9 @@ export class Replacer {
         }
     }
 
-    async run() {
+    run() {
         try {
-            await this.processFiles(this.sourceDir, this.outputDir);
+            this.processFiles(this.sourcePath, this.outputPath);
             logger.info('Files replacement, renaming completed successfully!');
         } catch (error) {
             logger.error('An error occurred while replacing files:', error);
@@ -119,7 +119,7 @@ export class Replacer {
     }
 
     // Iterate, replace content, rename and write the files
-    private async processFiles(directory: string, outputPath: string) {
+    private processFiles(directory: string, outputPath: string) {
         const {replaceConfig, renameConfig, readFileIgnoreRules, replaceIgnoreRules, renameIgnoreRules} = this;
         const files = globSync(`${directory}/**/*`, {nodir: true, dot: true, ignore: readFileIgnoreRules});
 
@@ -131,19 +131,19 @@ export class Replacer {
             copySync(file, newFilePath);
 
             if (!this.shouldIgnore(file, replaceIgnoreRules, IgnoreType.REPLACE)) {
-                await this.replaceInFile(newFilePath, replaceConfig);
+                this.replaceInFile(newFilePath, replaceConfig);
             }
 
             if (!this.shouldIgnore(file, renameIgnoreRules, IgnoreType.RENAME)) {
-                await this.renameFile(newFilePath, renameConfig);
+                this.renameFile(newFilePath, renameConfig);
             }
         }
     }
 
     // To assert whether the files need to be ignored
     private shouldIgnore(filePath: string, ignoreRules: string[], type: IgnoreType) {
-        const {sourceDir} = this;
-        const relativeFilePath = path.relative(sourceDir, filePath);
+        const {sourcePath} = this;
+        const relativeFilePath = path.relative(sourcePath, filePath);
         return ignoreRules.some((rule) => {
             const ruleRegex = minimatch.makeRe(rule);
             if (ruleRegex) {
@@ -164,7 +164,6 @@ export class Replacer {
                         }
                     }
                 }
-
                 return testResult;
             } else return false;
         });

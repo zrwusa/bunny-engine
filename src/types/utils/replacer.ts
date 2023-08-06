@@ -3,8 +3,8 @@ export type Config = { [key: string]: string };
 export type Rules = string[];
 
 export type Options = {
-    sourceDir: string,
-    outputDir: string,
+    sourcePath: string,
+    outputPath: string,
     replaceConfig: Config,
     renameConfig: Config,
     readFileIgnoreRules: Rules,

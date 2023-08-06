@@ -1,11 +1,15 @@
-import {BunnyEntity} from '../../types';
+import {ProjectConfig} from '../../types';
+import {toKebabCase, toSnakeCase} from '../../utils';
 
-export const apiDefinition: {entities: BunnyEntity[]} = {
+const projectName = 'my-app';
+
+export const projectConfig: ProjectConfig = {
+    name: projectName,
     entities: [
         {
             name: 'post',
             zhName: '博文',
-            properties: {
+            fields: {
                 title: {
                     type: ['varchar', 'string'],
                     maxLength: 127,
@@ -35,4 +39,27 @@ export const apiDefinition: {entities: BunnyEntity[]} = {
             }
         },
     ],
+    replacer: {
+        sourcePath:'src/templates/back-end',
+        outputPath: `dist/${projectName}/back-end`,
+        replaceConfig: {
+            'bunny_rest': toSnakeCase(projectName),
+            'bunny-rest': toKebabCase(projectName),
+        },
+        renameConfig: {
+            'bunny_rest': toSnakeCase(projectName),
+            'bunny-rest': toKebabCase(projectName),
+        },
+        readFileIgnoreRules:[
+            '**/node_modules/**',
+            '**/.DS_Store/**',
+            '.git/**',
+        ],
+        replaceIgnoreRules: [
+            // 'dir1/dir2/*.txt',
+        ],
+        renameIgnoreRules: [
+            // 'dir1/dir2/*.ts',
+        ]
+    },
 }

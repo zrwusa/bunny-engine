@@ -1,13 +1,13 @@
 import {insertIntoFile, toKebabCase, toPascalCase, toSnakeCase} from '../utils';
-import {apiDefinition} from '../templates/materials';
+import {projectConfig} from '../templates/materials';
 import {BunnyEntity} from '../types';
 import fs from 'fs';
 import path from 'path';
 
 export const makeEntity = (entity: BunnyEntity) => {
-    const {properties} = entity;
-    return Object.keys(properties).map(key => {
-            const {type, nullable, maxLength, minLength, maximum, minimum, precision, scale, example} = properties[key];
+    const {fields} = entity;
+    return Object.keys(fields).map(key => {
+            const {type, nullable, maxLength, minLength, maximum, minimum, precision, scale, example} = fields[key];
             return `
 
     @Column({
@@ -35,8 +35,8 @@ ${makeEntity(entity)}
 `;
 }
 
-export const writeEntities = (outputPath: string, entitiesPath: string = 'src/entities/',) => {
-    const {entities} = apiDefinition;
+export const writeEntities = (outputPath: string, entitiesPath: string = 'src/entities/') => {
+    const {entities} = projectConfig;
     for (const entity of entities) {
         const data = generateEntity(entity);
         const {name} = entity;

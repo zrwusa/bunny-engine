@@ -1,5 +1,5 @@
 import {toPascalCase, toConstantCase, appendIntoFile, toKebabCase, insertIntoFile} from '../utils';
-import {apiDefinition} from '../templates/materials';
+import {projectConfig} from '../templates/materials';
 import {BunnyEntity} from '../types';
 import fs from 'fs';
 import path from 'path';
@@ -20,7 +20,7 @@ export type BLAndTrans${toPascalCase(name)} = {
 }
 
 export const makeTypesConstantBizLogics = (outputPath: string, typesConstantsPath: string = 'src/types/constants/biz-logic/',) => {
-    const {entities} = apiDefinition;
+    const {entities} = projectConfig;
     for (const entity of entities) {
         const data = makeTypesConstantBizLogic(entity);
         const {name} = entity;

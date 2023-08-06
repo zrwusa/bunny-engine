@@ -6,15 +6,15 @@ import {
     toPascalCase,
     toTitleCase
 } from '../utils';
-import {apiDefinition} from '../templates/materials';
+import {projectConfig} from '../templates/materials';
 import {BunnyEntity} from '../types';
 import * as fs from 'fs';
 import path from 'path';
 
 export const makeSchema = (entity: BunnyEntity) => {
-    const {properties} = entity;
-    return Object.keys(properties).map(key => {
-            const {type, nullable, maxLength, minLength, maximum, minimum, precision, scale, example} = properties[key];
+    const {fields} = entity;
+    return Object.keys(fields).map(key => {
+            const {type, nullable, maxLength, minLength, maximum, minimum, precision, scale, example} = fields[key];
             return `
        ${key}: ${type[1]}()
         ${typeof minLength === 'number' ? '.min(' + `${minLength}` + ')' : ''}
@@ -30,7 +30,7 @@ export const makeSchema = (entity: BunnyEntity) => {
 }
 
 export const writeSchemas = (outputPath: string, schemasPath: string = 'src/schemas/') => {
-    const {entities} = apiDefinition;
+    const {entities} = projectConfig;
     for (const entity of entities) {
         const data = generateSchema(entity);
         const {name} = entity;

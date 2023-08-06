@@ -1,5 +1,5 @@
 import {insertIntoFile, toCamelCase, toKebabCase, toPascalCase} from '../utils';
-import {apiDefinition} from '../templates/materials';
+import {projectConfig} from '../templates/materials';
 import {BunnyEntity} from '../types';
 import * as fs from 'fs';
 import path from 'path';
@@ -39,7 +39,7 @@ export {${toCamelCase(name)}Router};
 `
 }
 export const writeRoutes = (outputPath: string,routesPath: string = 'src/routes/v1/') => {
-    const {entities} = apiDefinition;
+    const {entities} = projectConfig;
     for (const entity of entities) {
         const data = makeRoute(entity);
         const {name} = entity;

@@ -3,6 +3,11 @@ A microservices codebase generator for unified TypeScript-based frontend and bac
 
 # step 1: 'my-app' + yarn generate -> A ready to go project.
 
+<video autoplay muted loop style="width: 100%;">
+  <source src="https://raw.githubusercontent.com/zrwusa/assets/master/videos/gen-api-from-entity.webm" type="video/webm">
+  Your browser does not support the video tag.
+</video>
+
 Generate a complete web server code with a single command, use the specified project name.
 
 # step 2: Database design -> API code.

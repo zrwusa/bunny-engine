@@ -7,7 +7,7 @@ import {
     toSentenceCase,
     toTitleCase
 } from '../utils';
-import {apiDefinition} from '../templates/materials';
+import {projectConfig} from '../templates/materials';
 import {BunnyEntity} from '../types';
 import fs from 'fs';
 import path from 'path';
@@ -58,7 +58,7 @@ export const BL${toPascalCase(name)}: BLAndTrans${toPascalCase(name)} = {
 }
 
 export const writeConstantBizLogics = (outputPath: string,constantsPath: string = 'src/constants/biz-logic/',) => {
-    const {entities} = apiDefinition;
+    const {entities} = projectConfig;
     for (const entity of entities) {
         const data = makeConstantBizLogic(entity);
         const {name} = entity;

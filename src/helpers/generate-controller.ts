@@ -1,5 +1,5 @@
 import {insertIntoFile, toCamelCase, toConstantCase, toKebabCase, toPascalCase} from '../utils';
-import {apiDefinition} from '../templates/materials';
+import {projectConfig} from '../templates/materials';
 import {BunnyEntity} from '../types';
 import * as fs from 'fs';
 import path from 'path';
@@ -82,7 +82,7 @@ export async function delete${toPascalCase(name)}Ctrl(req: Request<Delete${toPas
 }
 
 export const writeControllers = (outputPath: string, controllersPath: string = 'src/controllers/') => {
-    const {entities} = apiDefinition;
+    const {entities} = projectConfig;
     for (const entity of entities) {
         const data = makeController(entity);
         const {name} = entity;
