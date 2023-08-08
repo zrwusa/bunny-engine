@@ -2,18 +2,60 @@
 
 A microservices codebase generator for unified TypeScript-based backend: 
 
-### standardized database setup
-### model code
-### controller code 
-### service layers code 
-### route rules code
-### API auth code
-### validation code
-### I18n code
-### OpenAPI docs
-### metrics
-### logs 
-### Docker-compose
+<table>
+  <tr>
+    <th>Item</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>standardized dat</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>model code</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>controller code</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>service layers c</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>route rules code</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>API auth code</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>validation code</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>I18n code</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>OpenAPI docs</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>metrics</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>logs</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Docker-compose</td>
+    <td></td>
+  </tr>
+</table>
  
 
 [//]: # (Frontend generates CRUD pages, components, Redux Saga API requests, user auth, tracing logs, API protocols, etc.)
