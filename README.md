@@ -1,28 +1,84 @@
 # bunny-engine
-A microservices codebase generator for unified TypeScript-based frontend and backend. Backend includes standardized database setup, model, controller, service layers, route rules, API auth, docs, validation, I18n, metrics, logs, Docker. Frontend generates CRUD pages, components, Redux Saga API requests, user auth, tracing logs, API protocols, etc.
+A microservices codebase generator for unified TypeScript-based backend. Backend includes standardized database setup, model, controller, service layers, route rules, API auth, docs, validation, I18n, metrics, logs, Docker.
+
+[//]: # (Frontend generates CRUD pages, components, Redux Saga API requests, user auth, tracing logs, API protocols, etc.)
 
 ## step 1: 'my-app' + yarn generate -> A ready to go project.
 
 Generate a complete web server code with a single command, use the specified project name.
+
 ![bunny-engine_project](https://github.com/zrwusa/assets/blob/master/images/bunny-engine_project.webp)
 
 
 ## step 2: Database design -> API code.
 
-Directly generate a complete set of API source code based on the database design, including:
+Directly generate a complete set of API source code based on the database design
+
 ![bunny-engine_entity](https://github.com/zrwusa/assets/blob/master/images/bunny-engine_entity.webp)
 
-## Standardized API code 
+## Standardized API code
 
 Functionalities for creating, updating, fetching, listing, and deleting data.
 Input validation rules, API authorization, session management, and consistent business logic and error handling.
 
+```json
+{
+  "http": {
+    "code": 200,
+    "message": "OK",
+    "description": "indicates that the request has succeeded."
+  },
+  "bizLogic": {
+    "code": "APP_PRODUCT_0003",
+    "message": "Get product success"
+  },
+  "resData": {
+    "id": "79d12907-bd59-4fea-bb7e-f09d92bef2ad",
+    "create_at": "2023-08-07T18:18:37.919Z",
+    "update_at": "2023-08-07T18:18:38.044Z",
+    "title": "Canon EOS 1500D DSLR Camera with 18-55mm Lens",
+    "description": "Designed for first-time DSLR owners who want impressive results straight out of the box, capture those magic moments no matter your level with the EOS 1500D. With easy to use automatic shooting modes, large 24.1 MP sensor, Canon Camera Connect app integration and built-in feature guide, EOS 1500D is always ready to go.",
+    "price": "6068.98",
+    "image": "https://i.imgur.com/QlRphfQ.jpg"
+  }
+}
+
+{
+  "http": {
+    "code": 400,
+    "message": "Bad Request",
+    "description": "indicates that the server cannot or will not process the request because the received syntax is invalid, nonsensical, or exceeds some limitation on what the server is willing to process."
+  },
+  "bizLogic": {
+    "code": "SYSTEM_0002",
+    "message": "请求验证失败",
+    "payload": [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "query",
+          "skip"
+        ],
+        "message": "Required"
+      }
+    ]
+  },
+  "resData": null
+}
+```
+
 ## API documentation and documentation service.
 
-## Docker development environment, testing and debugging environment, testing environment deployment, and production environment deployment.
+## Docker
+
+Docker development environment, testing and debugging environment, testing environment deployment, and production environment deployment.
 
 ## API service metrics monitoring.
 
 ## Logging system.
 
-## Technology stack: Typescript + Express + Docker + GraphQL + PostgreSQL + MongoDB + Redis + Nginx + Swagger + Pino + Prom-client.
+## Technology stack
+
+Typescript + Express + Docker + GraphQL + PostgreSQL + MongoDB + Redis + Nginx + Swagger + Pino + Prom-client.

@@ -1,8 +1,9 @@
 {
 	"info": {
 		"_postman_id": "2dba29dd-28c8-46e8-8943-cfb2279947eb",
-		"name": "bunny-rest",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"name": "bunny-engine",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13742496"
 	},
 	"item": [
 		{
@@ -719,9 +720,6 @@
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "POST",
 						"header": [
 							{
@@ -732,7 +730,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"content\": \"Designed for first-time DSLR owners who want impressive results straight out of the box, capture those magic moments no matter your level with the EOS 1500D. With easy to use automatic shooting modes, large 24.1 MP sensor, Canon Camera Connect app integration and built-in feature guide, EOS 1500D is always ready to go.\"\n}",
+							"raw": "{\n    \"title\": \"What is Node.js: A Comprehensive Guide\",\n    \"content\": \"Why Do We Use NodeJs?There are many reasons for which we prefer using NodeJs for the server side of our application, some of them are discussed in the following:NodeJs is built on Google Chrome’s V8 engine, and for this reason its execution time is very fast and it runs very quickly.There are more than 50,000 bundles available in the Node Package Manager and for that reason developers can import any of the packages any time according to their needed functionality for which a lot of time is saved.As NodeJs do not need to wait for an API to return data , so for building real time and data intensive web applications, it is very useful. It is totally asynchronous in nature that means it is totally non-blocking.The loading time for an audio or video is reduced by NodeJs because there is better synchronization of the code between the client and server for having the same code base.As NodeJs is open-source and it is nothing but a JavaScript framework , so for the developers who are already used to JavaScript, for them starting developing their projects with NodeJs is very easy.\",\n    \"price\": 102.68,\n    \"image\": \"https://nodejs.org/static/images/logo.svg\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -770,9 +768,6 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -811,9 +806,6 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -821,7 +813,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{endpoint}}/api/v1/posts?from=1&offset=10",
+							"raw": "{{endpoint}}/api/v1/posts?skip=1&take=10",
 							"host": [
 								"{{endpoint}}"
 							],
@@ -832,116 +824,11 @@
 							],
 							"query": [
 								{
-									"key": "from",
+									"key": "skip",
 									"value": "1"
 								},
 								{
-									"key": "offset",
-									"value": "10"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "DemoThunk",
-			"item": [
-				{
-					"name": "Create DemoThunk",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var jsonData = JSON.parse(responseBody);",
-									"postman.setEnvironmentVariable(\"demoThunkId\", jsonData.resData.id);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "x-refresh",
-								"value": "{{refreshToken}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"content\": \"Designed for first-time DSLR owners who want impressive results straight out of the box, capture those magic moments no matter your level with the EOS 1500D. With easy to use automatic shooting modes, large 24.1 MP sensor, Canon Camera Connect app integration and built-in feature guide, EOS 1500D is always ready to go.\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{endpoint}}/api/v1/demo-thunks/",
-							"host": [
-								"{{endpoint}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"demo-thunks",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get DemoThunks",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": []
-						},
-						"url": {
-							"raw": "{{endpoint}}/api/v1/demo-thunks?from=1&offset=10",
-							"host": [
-								"{{endpoint}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"demo-thunks"
-							],
-							"query": [
-								{
-									"key": "from",
-									"value": "1"
-								},
-								{
-									"key": "offset",
+									"key": "take",
 									"value": "10"
 								}
 							]
