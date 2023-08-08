@@ -1,15 +1,27 @@
-import {projectStructureGenerator} from './src/helpers';
-import {writeEntities} from './src/helpers/generate-entity';
-import {writeRoutes} from './src/helpers/generate-route';
-import {writeControllers} from './src/helpers/generate-controller';
-import {writeServices} from './src/helpers/generate-service';
-import {writeConstantBizLogics} from './src/helpers/generate-constant-biz-logic';
-import {makeTypesConstantBizLogics} from './src/helpers/generate-types-constant-biz-logic';
-import {writeSchemas} from './src/helpers/generate-schema';
+import {
+    makeTypesConstantBizLogics,
+    projectStructureGenerator,
+    writeConstantBizLogics,
+    writeControllers,
+    writeEntities,
+    writeRoutes,
+    writeSchemas,
+    writeServices
+} from './src/helpers';
 import {projectConfig} from './src/templates/materials';
 
-async function main() {
-    const {replacer: {sourcePath, outputPath, replaceConfig, renameConfig, readFileIgnoreRules, replaceIgnoreRules, renameIgnoreRules}} = projectConfig;
+function main() {
+    const {
+        replacer: {
+            sourcePath,
+            outputPath,
+            replaceConfig,
+            renameConfig,
+            readFileIgnoreRules,
+            replaceIgnoreRules,
+            renameIgnoreRules
+        }
+    } = projectConfig;
 
     try {
         const generator = projectStructureGenerator({
@@ -35,7 +47,7 @@ async function main() {
     }
 }
 
-main().then();
+main();
 
 
 
