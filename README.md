@@ -1,5 +1,20 @@
 # bunny-engine
-A microservices codebase generator for unified TypeScript-based backend. Backend includes standardized database setup, model, controller, service layers, route rules, API auth, docs, validation, I18n, metrics, logs, Docker.
+
+A microservices codebase generator for unified TypeScript-based backend: 
+
+### standardized database setup
+### model code
+### controller code 
+### service layers code 
+### route rules code
+### API auth code
+### validation code
+### I18n code
+### OpenAPI docs
+### metrics
+### logs 
+### Docker-compose
+ 
 
 [//]: # (Frontend generates CRUD pages, components, Redux Saga API requests, user auth, tracing logs, API protocols, etc.)
 
@@ -124,7 +139,9 @@ Input validation rules, API authorization, session management, and consistent bu
 ```
 
 ![bunny-engine_api-docs1](https://github.com/zrwusa/assets/blob/master/images/bunny-engine_api-docs1.png)
+
 ![bunny-engine_api-docs2](https://github.com/zrwusa/assets/blob/master/images/bunny-engine_api-docs2.png)
+
 ![bunny-engine_api-docs3](https://github.com/zrwusa/assets/blob/master/images/bunny-engine_api-docs3.png)
 
 ## API documentation and documentation service.
