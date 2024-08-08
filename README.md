@@ -64,6 +64,8 @@ A microservices codebase generator for unified TypeScript-based backend:
 
 Generate a complete web server code with a single command, use the specified project name.
 
+Configure the project name and data schema in the **src/templates/materials/project-config.ts**
+
 ![bunny-engine_project](https://github.com/zrwusa/assets/blob/master/images/bunny-engine_project.webp)
 
 1、Node.js
