@@ -1,7 +1,7 @@
 import {ProjectConfig} from '../../types';
 import {toKebabCase, toSnakeCase} from '../../utils';
 
-const projectName = 'my-app';
+const projectName = 'bunny-next';
 
 export const projectConfig: ProjectConfig = {
     name: projectName,
@@ -38,9 +38,42 @@ export const projectConfig: ProjectConfig = {
                 }
             }
         },
+        {
+            name: 'activity',
+            zhName: '活动',
+            fields: {
+                title: {
+                    type: ['varchar', 'string'],
+                    minLength: 8,
+                    maxLength: 127,
+                    example: 'Easter Shopping Frenzy'
+                },
+                content: {
+                    type: ['text', 'string'],
+                    nullable: true,
+                    minLength: 20,
+                    maxLength: 2047,
+                    example: '50% off on selected items at The Warehouse, double member points. Bunnings: Buy two, get one free on building materials; power tools starting at 30% off; group discounts on camping products.'
+                },
+                budget: {
+                    type: ['decimal', 'number'],
+                    precision: 10,
+                    scale: 2,
+                    minimum: 3000,
+                    maximum: 99999999.99,
+                    example: 60000
+                },
+                image: {
+                    type: ['varchar', 'string'],
+                    nullable: true,
+                    maxLength: 511,
+                    example: 'https://i.imgur.com/QlRphfQ.jpg'
+                }
+            }
+        },
     ],
     replacer: {
-        sourcePath:'src/templates/back-end',
+        sourcePath: 'src/templates/back-end',
         outputPath: `dist/${projectName}/back-end`,
         replaceConfig: {
             'bunny_rest': toSnakeCase(projectName),
@@ -50,7 +83,7 @@ export const projectConfig: ProjectConfig = {
             'bunny_rest': toSnakeCase(projectName),
             'bunny-rest': toKebabCase(projectName),
         },
-        readFileIgnoreRules:[
+        readFileIgnoreRules: [
             '**/node_modules/**',
             '**/.DS_Store/**',
             '.git/**',
