@@ -23,9 +23,9 @@ public/
 
 __tests__/
 
-.env
-.env.development
-.env.test
+#.env
+#.env.development
+#.env.test
 
 yarn-error.log
 .vercel
