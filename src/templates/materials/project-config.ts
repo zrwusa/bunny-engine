@@ -1,7 +1,7 @@
 import {ProjectConfig} from '../../types';
 import {toKebabCase, toSnakeCase} from '../../utils';
 
-const projectName = 'my-app';
+const projectName = 'bunny-next';
 
 export const projectConfig: ProjectConfig = {
     name: projectName,

@@ -166,6 +166,9 @@ yarn dev:prepare
 yarn dev
 ```
 
+### elastic https
+curl -k -u elastic:dev_password https://localhost:9200
+
 # Architecture principles
 
 Understand the optimization process, but don't optimize prematurely
@@ -201,5 +204,10 @@ The primary purpose of Unit-test is not to detect incorrect grammar but to valid
 Dockerfile and docker-compose.yml to simplify the deployment of the application. It is also possible to manually deploy the application.-->
 
 
+[//]: # (docker network create esnet)
+
+[//]: # (docker run -d --name elasticsearch --net esnet -p 9200:9200 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:8.5.0)
+
+[//]: # (docker run -d --name kibana --net esnet -p 5601:5601 docker.elastic.co/kibana/kibana:8.5.0)
 
 

@@ -1,32 +1,36 @@
 import pino from 'pino';
 import * as fs from 'fs';
 import * as path from 'path';
+import { multistream } from 'pino-multi-stream';
 
-const appRoot = process.cwd(), logsDir = path.join(appRoot, 'logs'), logFilePath = path.join(logsDir, 'bunny-rest.log');
+const appRoot = process.cwd();
+const logsDir = path.join(appRoot, 'logs');
+const logFilePath = path.join(logsDir, 'bunny-rest.log');
 
 if (!fs.existsSync(logsDir)) fs.mkdirSync(logsDir);
 if (!fs.existsSync(logFilePath)) fs.writeFileSync(logFilePath, '');
 
-// There is an issue when using the config.get<>('NODE_ENV'),
-// that can cause environment variables messy
 const isProduction = process.env.NODE_ENV === 'production';
 
-let logger = pino({
-    transport: {
-        target: 'pino-pretty'
-    },
-    base: {
-        pid: false,
-    },
-});
+const logFileStream = fs.createWriteStream(logFilePath, { flags: 'a' });
 
-if (isProduction) {
-    logger = pino({
-        level: 'info',
-        timestamp: pino.stdTimeFunctions.isoTime,
-    }, pino.destination({dest: logFilePath, sync: true}));
+const streams = [];
+
+if (!isProduction) {
+    streams.push({
+        stream: pino.transport({
+            target: 'pino-pretty'
+        }),
+    });
 }
 
-export default logger;
+streams.push({ stream: logFileStream });
 
-export {logger};
+const logger = pino({
+    level: isProduction ? 'info' : 'debug',
+    timestamp: pino.stdTimeFunctions.isoTime,
+    base: { pid: false },
+}, multistream(streams));
+
+export default logger;
+export { logger };

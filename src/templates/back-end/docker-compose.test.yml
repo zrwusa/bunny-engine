@@ -18,11 +18,11 @@ services:
       context: ./
       args:
         PKG_INSTALL_ENV: production
-#   If you want to synchronize code in the testing environment in real-time, you can enable the mapping of volumes.
-#    volumes:
-#      - ./:/bunny-rest
-#      - /bunny-rest/node_modules
-#    restart: unless-stopped
+    #   If you want to synchronize code in the testing environment in real-time, you can enable the mapping of volumes.
+    #    volumes:
+    #      - ./:/bunny-rest
+    #      - /bunny-rest/node_modules
+    #    restart: unless-stopped
     environment:
       - NODE_ENV=production
       - PORT=8081
@@ -45,6 +45,7 @@ services:
       - postgres-test
       - mongo-test
       - redis-test
+      - elasticsearch-test
 
   postgres-test:
     image: postgres
@@ -70,6 +71,19 @@ services:
     volumes:
       - redis-test:/data
 
+  elasticsearch-test:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
+    container_name: elasticsearch-test
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - ELASTIC_PASSWORD=test_password
+    ports:
+      - "9201:9200"
+      - "9301:9300"
+    expose:
+      - "9201"
+      - "9301"
 
 volumes:
   postgres-test:

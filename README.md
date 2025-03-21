@@ -8,7 +8,7 @@ A microservices codebase generator for unified TypeScript-based backend:
     <th>Description</th>
   </tr>
   <tr>
-    <td>standardized dat</td>
+    <td>database</td>
     <td></td>
   </tr>
   <tr>
@@ -178,6 +178,15 @@ Input validation rules, API authorization, session management, and consistent bu
   },
   "resData": null
 }
+```
+
+## CA
+
+```shell
+openssl req -x509 -nodes -new -sha256 -days 365 -keyout certs/ca.key -out certs/ca.crt -subj "/CN=Elasticsearch CA"
+openssl genpkey -algorithm RSA -out certs/http.key
+openssl req -new -key certs/http.key -out certs/http.csr -subj "/CN=elasticsearch-dev"
+openssl x509 -req -in certs/http.csr -CA certs/ca.crt -CAkey certs/ca.key -CAcreateserial -out certs/http.crt -days 365 -sha256
 ```
 
 ![bunny-engine_api-docs1](https://github.com/zrwusa/assets/blob/master/images/bunny-engine_api-docs1.png)
